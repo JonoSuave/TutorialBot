@@ -22,6 +22,9 @@
     },
     "dependencies": {
         "@microsoft/adaptivecards-tools": "^1.0.0",
+        "@microsoft/microsoft-graph-client": "^3.0.5",
+        "@microsoft/sp-core-library": "^1.17.3",
+        "@microsoft/sp-http": "^1.17.3",
         "@microsoft/teams-ai": "0.1.0-preview.2",
         "botbuilder": "^4.17.0",
         "restify": "^10.0.0"

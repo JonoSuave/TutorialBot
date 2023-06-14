@@ -28,6 +28,8 @@ import {
 	AzureOpenAIPlannerOptions,
 } from "@microsoft/teams-ai";
 import path from "path";
+import { GraphService } from "./service/GraphService";
+import { callMSGraph } from "./helpers/graphHelpers";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ConversationState {}
@@ -66,9 +68,11 @@ const app = new Application<ApplicationTurnState>({
 			assistantHistoryType: "text",
 		},
 	},
+	authentication: {
+		connectionName: config.connectionName,
+		title: "Sign In",
+	},
 });
-
-app.authentication.signInUser(context: TurnContext, state: ApplicationTurnState );
 
 app.ai.action(AI.FlaggedInputActionName, async (context, state, data) => {
 	await context.sendActivity(`I'm sorry your message was flagged: ${JSON.stringify(data)}`);
@@ -83,6 +87,12 @@ app.ai.action(AI.FlaggedOutputActionName, async (context, state, data) => {
 app.message("/history", async (context, state) => {
 	const history = ConversationHistory.toString(state, 2000, "\n\n");
 	await context.sendActivity(history);
+});
+
+app.ai.prompts.addFunction("graph", async (context, state) => {
+	const authToken = state.temp.value.authToken;
+	const graphEndpoint = "https://graph.microsoft.com/v1.0/me";
+	const graphClient = callMSGraph(graphEndpoint, authToken);
 });
 
 // Create adapter.
