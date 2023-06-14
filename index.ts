@@ -92,7 +92,7 @@ app.message("/history", async (context, state) => {
 app.ai.prompts.addFunction("graph", async (context, state) => {
 	const authToken = state.temp.value.authToken;
 	const graphEndpoint = "https://graph.microsoft.com/v1.0/me";
-	const graphClient = callMSGraph(graphEndpoint, authToken);
+	return callMSGraph(graphEndpoint, authToken);
 });
 
 // Create adapter.
